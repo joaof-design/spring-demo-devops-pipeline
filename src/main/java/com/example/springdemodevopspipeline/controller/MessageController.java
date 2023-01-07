@@ -8,6 +8,6 @@ public class MessageController {
 
     @RequestMapping("/message")
     public String message(){
-        return "Deploy to Azure k8s cluster with success";
+        return "Deploy to Azure k8s cluster with success!!";
     }
 }
