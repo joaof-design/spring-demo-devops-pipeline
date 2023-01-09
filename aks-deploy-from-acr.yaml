@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: my-spring-demo-devops-pipeline
-          image: azurecontainer99.azurecr.io/joaof-design/spring-demo-devops-pipeline:latest
+          image: azurecontainer99.azurecr.io/joaof-design/spring-demo-devops-pipeline:#{Build.BuildId}#
           imagePullPolicy: Always
           ports:
             - containerPort: 8085
@@ -36,22 +36,3 @@ spec:
   type: LoadBalancer
   selector:
     app: spring-demo-devops-pipeline
-
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: spring-boot-ingress
-  annotations:
-    kubernetes.io/ingress.class: nginx
-spec:
-  rules:
-    - http:
-        paths:
-          - path: /expose
-            pathType: Prefix
-            backend:
-              service:
-                name: spring-demo-devops-pipeline
-                port:
-                  number: 8085
