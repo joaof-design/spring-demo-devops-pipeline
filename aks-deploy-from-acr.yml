@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-springboot-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-demo-devops-pipeline
+  template:
+    metadata:
+      labels:
+        app: spring-demo-devops-pipeline
+    spec:
+      containers:
+        - name: my-spring-demo-devops-pipeline
+          image: azurecontainer99.azurecr.io/joaof-design/spring-demo-devops-pipeline:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8085
+# service type loadbalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: spring-demo-devops-pipeline
+    k8s-app: spring-demo-devops-pipeline
+  name: spring-demo-devops-pipeline
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8085
+  type: LoadBalancer
+  selector:
+    app: spring-demo-devops-pipeline
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spring-boot-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /expose
+            pathType: Prefix
+            backend:
+              service:
+                name: spring-demo-devops-pipeline
+                port:
+                  number: 8085
