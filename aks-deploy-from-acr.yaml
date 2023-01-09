@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-springboot-deployment
+  name: my-spring-devops-pipeline-deployment
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,7 @@ spec:
           image: azurecontainer99.azurecr.io/joaof-design/spring-demo-devops-pipeline:#{Build.BuildId}#
           imagePullPolicy: Always
           ports:
-            - containerPort: 8085
+            - containerPort: 8086
 # service type loadbalancer
 ---
 apiVersion: v1
@@ -32,7 +32,7 @@ spec:
     - name: http
       port: 80
       protocol: TCP
-      targetPort: 8085
+      targetPort: 8086
   type: LoadBalancer
   selector:
     app: spring-demo-devops-pipeline
