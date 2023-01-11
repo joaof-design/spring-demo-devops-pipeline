@@ -36,3 +36,25 @@ spec:
   type: LoadBalancer
   selector:
     app: spring-demo-devops-pipeline
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: devops-pipeline-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /demo-devops(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: spring-demo-devops-pipeline
+                port:
+                  number: 80
